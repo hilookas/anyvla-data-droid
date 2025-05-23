@@ -1,0 +1,1 @@
+bash ZED_SDK_Ubuntu22_cuda12.1_v4.2.5.zstd.run --target ./zed
