@@ -1,4 +1,6 @@
 *.run
 *.pkl
 droid
-Helper3D
+output*
+uvd.png
+demo.mp4
