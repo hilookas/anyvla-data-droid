@@ -35,3 +35,23 @@ def xyzrpy_from_T(T):
     xyzrpy[:3] = T[:3,3]
     xyzrpy[3:] = pr.euler_from_matrix(T[:3,:3], 0, 1, 2, True)
     return xyzrpy
+
+def normalized_uvd_axis_angle_from_T(T, intrinsics, depth_scale, height, width):
+    xyz = T[:3, 3]
+    
+    axis_angle = pr.compact_axis_angle_from_matrix(T[:3,:3])
+    
+    uvd = uvd_from_xyz(xyz, intrinsics, depth_scale)
+
+    return uvd[0] / width, uvd[1] / height, uvd[2] / depth_scale / 2.8, *axis_angle
+
+def T_from_normalized_uvd_axis_angle(pose, intrinsics, depth_scale, height, width):
+    xyz = xyz_from_uvd((pose[0] * width, pose[1] * height, pose[2] * depth_scale * 2.8), intrinsics, depth_scale)
+    
+    R = pr.matrix_from_compact_axis_angle(pose[3:])
+    
+    T = np.eye(4)
+    T[:3, :3] = R
+    T[:3, 3] = xyz
+    
+    return T
