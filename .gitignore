@@ -7,6 +7,9 @@ demo.mp4
 T.png
 __pycache__
 list.pkl
-screen.log
+screen.log*
 image.png
 depth.png
+error_log.jsonl
+*.png
+*.ply

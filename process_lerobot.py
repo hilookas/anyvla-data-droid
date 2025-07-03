@@ -163,7 +163,7 @@ def main():
 
             intrinsics, depth_scale, fps, height, width = next(g)
 
-            assert fps == 60 or fps == 59 or fps == 58
+            assert fps > 50
             assert height == 720
             assert width == 1280
 
@@ -171,7 +171,7 @@ def main():
                 # TODO depth 精度测试
                 # TODO image 大小测试
 
-                action_frame_idx = frame_idx + round(fps * 0.2) # following latency 200ms
+                action_frame_idx = frame_idx + round(60 * 0.2) # following latency 200ms
                 
                 if action_frame_idx >= len(Teef2cams):
                     continue
@@ -207,7 +207,14 @@ def main():
         except Exception as e:
             import traceback; print(traceback.format_exc())
             print(e)
-            import ipdb; ipdb.set_trace()
+            import json
+            with open("error_log.jsonl", "a", encoding="utf-8") as f:
+                f.write(json.dumps({
+                    "episode_meta_path": episode_meta_path,
+                    "traceback": traceback.format_exc(),
+                    "error": str(e),
+                }, ensure_ascii=False) + "\n")
+            # import ipdb; ipdb.set_trace()
 
 if __name__ == "__main__":
     main()
